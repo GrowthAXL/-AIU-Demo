@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Certificate Search</title>
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        flex-direction: column;
+        font-family: Arial, sans-serif;
+      }
+      input {
+        padding: 10px;
+        margin: 10px;
+        width: 250px;
+      }
+      button {
+        padding: 10px;
+        cursor: pointer;
+      }
+      .error {
+        color: red;
+      }
+      .copy-container {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 10px;
+      }
+      .copy-button {
+        padding: 5px 10px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+      }
+      .copy-button:hover {
+        background-color: #0056b3;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Search Certificate by Aadhar Number</h2>
+    <form action="/search" method="POST">
+      <input
+        type="text"
+        name="aadhar_number"
+        placeholder="Enter Aadhar Number"
+        required
+      />
+      <button type="submit">Submit</button>
+    </form>
+
+    <% if (error) { %>
+    <p class="error"><%= error %></p>
+    <% } %> <% if (txnId) { %>
+    <div class="copy-container">
+      <p>Transaction ID: <strong id="txnId"><%= txnId %></strong></p>
+      <button class="copy-button" onclick="copyTxnId()">Copy</button>
+    </div>
+
+    <script>
+      function copyTxnId() {
+        const txnIdText = document.getElementById("txnId").innerText;
+        navigator.clipboard
+          .writeText(txnIdText)
+          .then(() => {
+            alert("Transaction ID copied to clipboard!");
+          })
+          .catch((err) => {
+            console.error("Failed to copy:", err);
+          });
+      }
+
+      const presignedUrl = "<%= presignedUrl %>";
+      if (presignedUrl) {
+        window.open(presignedUrl, "_blank");
+      }
+    </script>
+    <% } %>
+  </body>
+</html>
